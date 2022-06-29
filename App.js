@@ -5,12 +5,9 @@ import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Asset, useAssets } from "expo-asset";
-import {
-    NavigationContainer,
-    DarkTheme,
-    DefaultTheme,
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import Tabs from "./navigation/Tabs";
+import Stack from "./navigation/Stack";
 
 const loadFonts = fonts => fonts.map(font => Font.loadAsync(font));
 export default function App() {
@@ -20,8 +17,6 @@ export default function App() {
         const fonts = loadFonts([Ionicons.font]);
         await Promise.all([...fonts]);
     };
-
-    const isDark = useColorScheme() === "dark";
 
     if (!ready) {
         return (
@@ -34,8 +29,8 @@ export default function App() {
     }
     return (
         //수동으로 하지 않고 이렇게 테마를 주어 다크모드를 설정할수 있음
-        <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
-            <Tabs />
+        <NavigationContainer>
+            <Stack />
         </NavigationContainer>
     );
 }

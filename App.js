@@ -1,22 +1,40 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, useColorScheme, View } from "react-native";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Asset, useAssets } from "expo-asset";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+    NavigationContainer,
+    DarkTheme,
+    DefaultTheme,
+} from "@react-navigation/native";
 import Tabs from "./navigation/Tabs";
 
+const loadFonts = fonts => fonts.map(font => Font.loadAsync(font));
 export default function App() {
-    //로딩과정에서 뭔갈하고싶다면 훅말고.. 전의 방법을..
-    const [assets] = useAssets([require("./wallpaperbetter.jpg")]);
-    const [loaded] = Font.useFonts(Ionicons.font);
-    if (!assets || !loaded) {
-        return <AppLoading />;
+    const [ready, setReady] = useState(false);
+    const onFinish = () => setReady(true);
+    const startLoading = async () => {
+        const fonts = loadFonts([Ionicons.font]);
+        await Promise.all([...fonts]);
+    };
+
+    const isDark = useColorScheme() === "dark";
+
+    if (!ready) {
+        return (
+            <AppLoading
+                startAsync={startLoading}
+                onFinish={onFinish}
+                onError={console.error}
+            />
+        );
     }
     return (
-        <NavigationContainer>
+        //수동으로 하지 않고 이렇게 테마를 주어 다크모드를 설정할수 있음
+        <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
             <Tabs />
         </NavigationContainer>
     );

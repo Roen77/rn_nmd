@@ -18,9 +18,12 @@ const ScreenSec = ({ navigation: { navigate } }) => (
         </TouchableOpacity>
     </View>
 );
-const ScreenTh = ({ navigation: { setOptions } }) => (
+const ScreenTh = ({ navigation: { setOptions, navigate } }) => (
     <View>
-        <TouchableOpacity onPress={() => setOptions({ title: "hello" })}>
+        {/* <TouchableOpacity onPress={() => setOptions({ title: "hello" })}> */}
+        <TouchableOpacity
+            onPress={() => navigate("Tabs", { screen: "Search" })}
+        >
             <Text>change title</Text>
         </TouchableOpacity>
     </View>
@@ -28,10 +31,14 @@ const ScreenTh = ({ navigation: { setOptions } }) => (
 const NativeStack = createNativeStackNavigator();
 
 const Stack = () => (
-    <NativeStack.Navigator>
+    <NativeStack.Navigator screenOptions={{ animation: "flip" }}>
         <NativeStack.Screen name="One" component={ScreenOne} />
         <NativeStack.Screen name="Two" component={ScreenSec} />
-        <NativeStack.Screen name="Three" component={ScreenTh} />
+        <NativeStack.Screen
+            name="Three"
+            component={ScreenTh}
+            // options={{ presentation: "modal" }}
+        />
     </NativeStack.Navigator>
 );
 

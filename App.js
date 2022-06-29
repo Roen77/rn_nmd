@@ -8,6 +8,7 @@ import { Asset, useAssets } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
 import Tabs from "./navigation/Tabs";
 import Stack from "./navigation/Stack";
+import Root from "./navigation/Root";
 
 const loadFonts = fonts => fonts.map(font => Font.loadAsync(font));
 export default function App() {
@@ -30,7 +31,7 @@ export default function App() {
     return (
         //수동으로 하지 않고 이렇게 테마를 주어 다크모드를 설정할수 있음
         <NavigationContainer>
-            <Stack />
+            <Root />
         </NavigationContainer>
     );
 }

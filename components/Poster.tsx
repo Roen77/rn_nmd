@@ -16,5 +16,4 @@ interface PosterProps {
 const Poster: React.FC<PosterProps> = ({ path }) => (
   <Image source={{ uri: makeImgPath(path) }} />
 );
-
 export default Poster;

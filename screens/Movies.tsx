@@ -10,7 +10,9 @@ import {
 } from "react-native";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import Swiper from "react-native-swiper";
+import { useQuery, useQueryClient } from "react-query";
 import styled from "styled-components/native";
+import { moviesApi } from "../api";
 import HMedia from "../components/HMedia";
 import Poster from "../components/Poster";
 import Slide from "../components/Slide";
@@ -82,69 +84,36 @@ const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
   navigation,
 }) => {
-  const [loading, setLoading] = useState(true);
-  const [nowPlaying, setNowPlaying] = useState([]);
-  const [upcoming, setUpcoming] = useState([]);
-  const [trending, setTrending] = useState([]);
+  const queryClient = useQueryClient();
+  const { isLoading: nowPlayingLoading, data: nowPlayingData } = useQuery(
+    ["movies", "nowPlaying"],
+    moviesApi.nowPlaying
+  );
+  const { isLoading: upcomingLoading, data: upcomingData } = useQuery(
+    ["movies", "upcoming"],
+    moviesApi.upcoming
+  );
+  const { isLoading: trendingLoading, data: trendingData } = useQuery(
+    ["movies", "trending"],
+    moviesApi.trending
+  );
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = React.useCallback(async () => {
-    console.log("refresg");
+  const onRefresh = async () => {
     setRefreshing(true);
-    await getData();
+    console.log("refetch");
+    await queryClient.refetchQueries(["movies"]);
     setRefreshing(false);
-  }, []);
-
-  const getTrending = async () => {
-    const { results } = await (
-      await fetch(
-        `https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}`
-      )
-    ).json();
-
-    // const json = await res.json()
-    // https://image.tmdb.org/t/p/w500/kqjL17yufvn9OVLyXYpvtyrFfak.jpg
-    setTrending(results);
-    console.log("trend", results);
-  };
-  const getUpComing = async () => {
-    const { results } = await (
-      await fetch(
-        `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=ko&page=1`
-      )
-    ).json();
-
-    // const json = await res.json()
-    // https://image.tmdb.org/t/p/w500/kqjL17yufvn9OVLyXYpvtyrFfak.jpg
-    setUpcoming(results);
-    console.log("up", results);
   };
 
-  const getNowPlaying = async () => {
-    const { results } = await (
-      await fetch(
-        `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=ko&page=1&region=KR`
-      )
-    ).json();
-
-    // const json = await res.json()
-    // https://image.tmdb.org/t/p/w500/kqjL17yufvn9OVLyXYpvtyrFfak.jpg
-    setNowPlaying(results);
-  };
-  const getData = async () => {
-    await Promise.all([getTrending(), getUpComing(), getNowPlaying()]);
-    setLoading(false);
-  };
-  useEffect(() => {
-    getData();
-  }, []);
+  const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
 
   const renderVMedia = ({ item }) => (
     <VMedia
       posterPath={item.poster_path}
       originalTitle={item.original_title}
       voteAverage={item.vote_average}
-      fullData={trending}
+      fullData={item}
     />
   );
 
@@ -164,8 +133,9 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
     </Loader>
   ) : (
     <FlatList
-      onRefresh={onRefresh}
-      refreshing={refreshing}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
       ListHeaderComponent={
         <>
           <Swiper
@@ -181,7 +151,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
               height: SCREEN_HEIGHT / 4,
             }}
           >
-            {nowPlaying.map((movie) => (
+            {nowPlayingData?.results.map((movie) => (
               <Slide
                 key={movie.id}
                 backdropPath={movie.backdrop_path || ""}
@@ -202,14 +172,14 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
               showsHorizontalScrollIndicator={false}
               //사이사이 뭐 들어갈건지
               ItemSeparatorComponent={VSeparator}
-              data={trending}
+              data={trendingData?.results}
               renderItem={renderVMedia}
             />
           </ListContainer>
           <ListTitle>Comming soon</ListTitle>
         </>
       }
-      data={upcoming}
+      data={upcomingData?.results}
       keyExtractor={(item) => item.id + ""}
       ItemSeparatorComponent={HSeparator}
       renderItem={renderHMedia}

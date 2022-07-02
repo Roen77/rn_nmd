@@ -3609,6 +3609,11 @@
   dependencies:
     "micromatch" "^4.0.2"
 
+"flatted@^3.2.4":
+  "integrity" "sha512-0sQoMh9s0BYsm+12Huy/rkKxVu4R1+r96YX5cG44rHV0pQ6iC3Q+mkoMFaGWObMFYQxCVT+ssG1ksneA2MI9KQ=="
+  "resolved" "https://registry.npmjs.org/flatted/-/flatted-3.2.6.tgz"
+  "version" "3.2.6"
+
 "flow-parser@^0.121.0":
   "integrity" "sha512-1gIBiWJNR0tKUNv8gZuk7l9rVX06OuLzY9AoGio7y/JT4V1IZErEMEq2TJS+PFcw/y0RshZ1J/27VfK1UQzYVg=="
   "resolved" "https://registry.npmjs.org/flow-parser/-/flow-parser-0.121.0.tgz"
@@ -5892,6 +5897,11 @@
     "jscodeshift" "^0.13.1"
     "nullthrows" "^1.1.1"
 
+"react-native-flipper@^0.127.0":
+  "integrity" "sha512-qloUyUOs9MoMVncIDDWeOxAPbomWJ3e4y0SgyCgq8joJEOXC7RvPWeEfUXp0EPyNhHGQV9a4RwzF6BWKFCR3Kg=="
+  "resolved" "https://registry.npmjs.org/react-native-flipper/-/react-native-flipper-0.127.0.tgz"
+  "version" "0.127.0"
+
 "react-native-gesture-handler@^2.5.0":
   "integrity" "sha512-djZdcprFf08PZC332D+AeG5wcGeAPhzfCJtB3otUgOgTlvjVXmg/SLFdPJSpzLBqkRAmrC77tM79QgKbuLxkfw=="
   "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.5.0.tgz"
@@ -5961,7 +5971,7 @@
     "normalize-css-color" "^1.0.2"
     "prop-types" "^15.6.0"
 
-"react-native@*", "react-native@0.68.2":
+"react-native@*", "react-native@>0.62.0", "react-native@0.68.2":
   "integrity" "sha512-qNMz+mdIirCEmlrhapAtAG+SWVx6MAiSfCbFNhfHqiqu1xw1OKXdzIrjaBEPihRC2pcORCoCHduHGQe/Pz9Yuw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.68.2.tgz"
   "version" "0.68.2"
@@ -5999,7 +6009,14 @@
     "whatwg-fetch" "^3.0.0"
     "ws" "^6.1.4"
 
-"react-query@^3.39.1":
+"react-query-native-devtools@^4.0.0":
+  "integrity" "sha512-TKwYO0tcw744c2aI1AGL2zoLycx3mr6Apl/3p9EIxh204kWGBpF7OhPQY7OKSdPvgw1jG6wlKzfAj3asgCSZGg=="
+  "resolved" "https://registry.npmjs.org/react-query-native-devtools/-/react-query-native-devtools-4.0.0.tgz"
+  "version" "4.0.0"
+  dependencies:
+    "flatted" "^3.2.4"
+
+"react-query@^3.34.6", "react-query@^3.39.1":
   "integrity" "sha512-qYKT1bavdDiQZbngWZyPotlBVzcBjDYEJg5RQLBa++5Ix5jjfbEYJmHSZRZD+USVHUSvl/ey9Hu+QfF1QAK80A=="
   "resolved" "https://registry.npmjs.org/react-query/-/react-query-3.39.1.tgz"
   "version" "3.39.1"

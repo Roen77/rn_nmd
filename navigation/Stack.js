@@ -1,45 +1,27 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, useColorScheme } from "react-native";
+import Detail from "../screens/Detail";
+import { BLACK_COLOR } from "../colors";
 
-const ScreenOne = ({ navigation: { navigate } }) => {
-    return (
-        <View>
-            <TouchableOpacity onPress={() => navigate("Two")}>
-                <Text>one</Text>
-            </TouchableOpacity>
-        </View>
-    );
-};
-const ScreenSec = ({ navigation: { navigate } }) => (
-    <View>
-        <TouchableOpacity onPress={() => navigate("Three")}>
-            <Text>tttttt</Text>
-        </TouchableOpacity>
-    </View>
-);
-const ScreenTh = ({ navigation: { setOptions, navigate } }) => (
-    <View>
-        {/* <TouchableOpacity onPress={() => setOptions({ title: "hello" })}> */}
-        <TouchableOpacity
-            onPress={() => navigate("Tabs", { screen: "Search" })}
-        >
-            <Text>change title</Text>
-        </TouchableOpacity>
-    </View>
-);
 const NativeStack = createNativeStackNavigator();
 
-const Stack = () => (
-    <NativeStack.Navigator screenOptions={{ animation: "flip" }}>
-        <NativeStack.Screen name="One" component={ScreenOne} />
-        <NativeStack.Screen name="Two" component={ScreenSec} />
-        <NativeStack.Screen
-            name="Three"
-            component={ScreenTh}
-            // options={{ presentation: "modal" }}
-        />
+const Stack = () => {
+  const isDark = useColorScheme() === "dark";
+  return (
+    <NativeStack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        headerStyle: {
+          backgroundColor: isDark ? BLACK_COLOR : "white",
+        },
+        headerTitleStyle: {
+          color: isDark ? "white" : BLACK_COLOR,
+        },
+      }}
+    >
+      <NativeStack.Screen name="Detail" component={Detail} />
     </NativeStack.Navigator>
-);
-
+  );
+};
 export default Stack;

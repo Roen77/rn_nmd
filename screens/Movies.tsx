@@ -108,7 +108,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
 
   const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
 
-  const renderVMedia = ({ item }) => (
+  const renderVMedia = ({ item }: any) => (
     <VMedia
       posterPath={item.poster_path}
       originalTitle={item.original_title}
@@ -117,7 +117,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
     />
   );
 
-  const renderHMedia = ({ item }) => (
+  const renderHMedia = ({ item }: any) => (
     <HMedia
       posterPath={item.poster_path || ""}
       originalTitle={item.original_title}
@@ -131,7 +131,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
     <Loader>
       <ActivityIndicator />
     </Loader>
-  ) : (
+  ) : upcomingData ? (
     <FlatList
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -167,7 +167,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
             <ListTitle>Trending Movies</ListTitle>
             <TrendingScroll
               horizontal
-              keyExtractor={(item) => item.id + ""}
+              keyExtractor={(item: any) => item.id + ""}
               contentContainerStyle={{ paddingHorizontal: 30 }}
               showsHorizontalScrollIndicator={false}
               //사이사이 뭐 들어갈건지
@@ -184,7 +184,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
       ItemSeparatorComponent={HSeparator}
       renderItem={renderHMedia}
     />
-  );
+  ) : null;
 };
 
 export default Movies;

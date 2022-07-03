@@ -29,6 +29,7 @@ const HList: React.FC<HListProps> = ({ title, data }) => (
   <ListContainer>
     <ListTitle>{title}</ListTitle>
     <FlatList
+      //@ts-ignore
       data={data}
       horizontal
       showsHorizontalScrollIndicator={false}

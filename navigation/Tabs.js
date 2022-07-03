@@ -1,7 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Movies from "../screens/Movies";
-import Tv from "../screens/Tv.jsx";
+import Tv from "../screens/Tv";
 import Search from "../screens/Search";
 import { Text, View } from "react-native";
 import { useColorScheme } from "react-native";

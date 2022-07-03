@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import Swiper from "react-native-swiper";
-import { useQuery, useQueryClient } from "react-query";
+import { useInfiniteQuery, useQuery, useQueryClient } from "react-query";
 import styled from "styled-components/native";
 import { moviesApi } from "../api";
 import HMedia from "../components/HMedia";
@@ -89,10 +89,19 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
     ["movies", "nowPlaying"],
     moviesApi.nowPlaying
   );
-  const { isLoading: upcomingLoading, data: upcomingData } = useQuery(
-    ["movies", "upcoming"],
-    moviesApi.upcoming
-  );
+  const {
+    isLoading: upcomingLoading,
+    data: upcomingData,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery(["movies", "upcoming"], moviesApi.upcoming, {
+    //첫번째인자는 api호출시 마지막에 호출한 데이터를 말하고 두번째인자는 이제까지 호출해서 누적된 전체 데이터를 의미함
+    //해당 getNextPageParam으로 다음페이지를 구해야한다.
+    getNextPageParam: (currentPage) => {
+      const nextPage = currentPage.page + 1;
+      return nextPage > currentPage.total_pages ? null : nextPage;
+    },
+  });
   const { isLoading: trendingLoading, data: trendingData } = useQuery(
     ["movies", "trending"],
     moviesApi.trending
@@ -104,6 +113,13 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
     console.log("refetch");
     await queryClient.refetchQueries(["movies"]);
     setRefreshing(false);
+  };
+
+  const loadMore = () => {
+    if (hasNextPage) {
+      console.log("load");
+      fetchNextPage();
+    }
   };
 
   const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
@@ -133,6 +149,8 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
     </Loader>
   ) : upcomingData ? (
     <FlatList
+      onEndReached={loadMore}
+      // onEndReachedThreshold={0.4}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
@@ -179,7 +197,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({
           <ListTitle>Comming soon</ListTitle>
         </>
       }
-      data={upcomingData?.results}
+      data={upcomingData.pages.map((page) => page.results).flat()}
       keyExtractor={(item) => item.id + ""}
       ItemSeparatorComponent={HSeparator}
       renderItem={renderHMedia}
@@ -257,3 +275,13 @@ refreshControl={
 />
 </Container> */
 }
+
+/*{
+"pageParams": [undefined],
+"pages": [
+  {"dates": [Object], "page": 1, "results": [Array], "total_pages": 18, "total_results": 348}
+  {"dates": [Object], "page": 2, "results": [Array], "total_pages": 18, "total_results": 348}
+  {"dates": [Object], "page": 3, "results": [Array], "total_pages": 18, "total_results": 348}
+  {"dates": [Object], "page": 4, "results": [Array], "total_pages": 18, "total_results": 348}
+  ]
+}*/
